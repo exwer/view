@@ -4,7 +4,7 @@
     "module": "esnext",
     "lib": ["es6","DOM"],
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": true,
