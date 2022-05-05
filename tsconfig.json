@@ -3,6 +3,7 @@
     "target": "es5",
     "module": "esnext",
     "lib": ["es6","DOM"],
+    "downlevelIteration": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
     "esModuleInterop": true,

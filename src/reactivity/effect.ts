@@ -1,4 +1,8 @@
+type Target = Record<any, any>
+type DepsMap = Map<any, Set<ReactiveEffect>>
+
 let activeEffect: ReactiveEffect
+const targetMap = new Map<Target, DepsMap >()
 class ReactiveEffect {
   private _fn: any
   constructor(fn: Function) {
@@ -17,8 +21,7 @@ export function effect(fn: Function) {
   _effect.run()
 }
 
-const targetMap = new Map()
-export function track(target: Record<any, any>, key: any) {
+export function track(target: Target, key: any) {
   // target:key -> dep
   let depsMap = targetMap.get(target)
   if (!depsMap) {
@@ -33,4 +36,16 @@ export function track(target: Record<any, any>, key: any) {
   }
 
   dep.add(activeEffect)
+}
+
+export function trigger(target: Target, key: any) {
+  const depsMap = targetMap.get(target)
+
+  if (depsMap) {
+    const dep = depsMap.get(key)
+    if (dep) {
+      for (const effect of dep.values())
+        effect.run()
+    }
+  }
 }
