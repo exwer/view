@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { reactive } from '../reactive'
-import { effect } from '../effect'
+import { effect, stop } from '../effect'
 
 describe('effect', () => {
   it('happy path', () => {
