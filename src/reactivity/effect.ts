@@ -1,12 +1,18 @@
 type Target = Record<any, any>
 type DepsMap = Map<any, Set<ReactiveEffect>>
+type Scheduler = () => any
+interface EffectOptions {
+  scheduler?: Scheduler
+}
 
 let activeEffect: ReactiveEffect
-const targetMap = new Map<Target, DepsMap >()
+const targetMap = new Map<Target, DepsMap>()
 class ReactiveEffect {
   private _fn: any
-  constructor(fn: Function) {
+  public scheduler
+  constructor(fn: Function, scheduler?: Scheduler) {
     this._fn = fn
+    this.scheduler = scheduler
   }
 
   run() {
@@ -15,8 +21,9 @@ class ReactiveEffect {
   }
 }
 
-export function effect(fn: Function) {
-  const _effect = new ReactiveEffect(fn)
+export function effect(fn: Function, options: EffectOptions = {}) {
+  const scheduler = options.scheduler
+  const _effect = new ReactiveEffect(fn, scheduler)
 
   _effect.run()
 
@@ -46,8 +53,12 @@ export function trigger(target: Target, key: any) {
   if (depsMap) {
     const dep = depsMap.get(key)
     if (dep) {
-      for (const effect of dep.values())
-        effect.run()
+      for (const effect of dep.values()) {
+        if (effect.scheduler)
+          effect.scheduler()
+        else
+          effect.run()
+      }
     }
   }
 }
