@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { reactive } from '../reactive'
 import { effect } from '../effect'
 
@@ -30,5 +30,31 @@ describe('effect', () => {
     const r = runner()
     expect(foo).toBe(12)
     expect(r).toBe('foo')
+  })
+
+  it('scheduler', () => {
+    let dummy
+    let run: any
+    const scheduler = vi.fn(() => {
+      /* eslint-disable @typescript-eslint/no-use-before-define */
+      run = runner
+    })
+    const obj = reactive({ foo: 1 })
+    const runner = effect(() => {
+      dummy = obj.foo
+    }, { scheduler })
+    expect(scheduler).not.toHaveBeenCalled()
+    expect(dummy).toBe(1)
+
+    // should be called on first trigger
+    obj.foo++
+    expect(scheduler).toHaveBeenCalledTimes(1)
+
+    // should not run yet
+    expect(dummy).toBe(1)
+
+    run()
+    // should have run
+    expect(dummy).toBe(2)
   })
 })
