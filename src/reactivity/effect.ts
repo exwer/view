@@ -22,8 +22,7 @@ class ReactiveEffect {
 }
 
 export function effect(fn: Function, options: EffectOptions = {}) {
-  const scheduler = options.scheduler
-  const _effect = new ReactiveEffect(fn, scheduler)
+  const _effect = new ReactiveEffect(fn, options.scheduler)
 
   _effect.run()
 
