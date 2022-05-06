@@ -14,8 +14,8 @@ const targetMap = new Map<Target, DepsMap>()
 class ReactiveEffect {
   private _fn: any
   public scheduler
+  private active = true
   public deps: Set<any>[] = []
-
   constructor(fn: Function, scheduler?: Scheduler) {
     this._fn = fn
     this.scheduler = scheduler
@@ -27,7 +27,10 @@ class ReactiveEffect {
   }
 
   stop() {
-    cleanupEffect(this)
+    if (this.active) {
+      cleanupEffect(this)
+      this.active = false
+    }
   }
 }
 
