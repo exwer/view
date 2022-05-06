@@ -1,12 +1,14 @@
+import { extend } from '../shared'
+
 type Target = Record<any, any>
 type DepsMap = Map<any, Set<ReactiveEffect>>
-type Scheduler = () => any
 interface Runner {
   (): any
   effect?: ReactiveEffect
 }
 interface EffectOptions {
-  scheduler?: Scheduler
+  scheduler?: () => void
+  onStop?: () => void
 }
 
 let activeEffect: ReactiveEffect
@@ -16,7 +18,8 @@ class ReactiveEffect {
   public scheduler
   private active = true
   public deps: Set<any>[] = []
-  constructor(fn: Function, scheduler?: Scheduler) {
+  public onStop?: () => void
+  constructor(fn: Function, scheduler?: EffectOptions['scheduler']) {
     this._fn = fn
     this.scheduler = scheduler
   }
@@ -29,6 +32,8 @@ class ReactiveEffect {
   stop() {
     if (this.active) {
       cleanupEffect(this)
+      if (this.onStop)
+        this.onStop()
       this.active = false
     }
   }
@@ -42,6 +47,7 @@ function cleanupEffect(effect: ReactiveEffect) {
 
 export function effect(fn: Function, options: EffectOptions = {}) {
   const _effect = new ReactiveEffect(fn, options.scheduler)
+  extend(_effect, options)
   _effect.run()
 
   const runner: Runner = _effect.run.bind(_effect)
@@ -65,7 +71,8 @@ export function track(target: Target, key: any) {
 
   dep.add(activeEffect)
   // 反向收集
-  activeEffect.deps.push(dep)
+  if (activeEffect)
+    activeEffect.deps.push(dep)
 }
 
 export function trigger(target: Target, key: any) {
