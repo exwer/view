@@ -3,7 +3,7 @@ import { track, trigger } from './effect'
 export const ReactiveFlags = {
   IS_REACTIVE: Symbol('__v_isReactive'),
   IS_READONLY: Symbol('__v_isReadonly'),
-}
+} as const
 
 const get = createGetter()
 const set = createSetter()
