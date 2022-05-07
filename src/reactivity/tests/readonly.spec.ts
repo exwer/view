@@ -11,13 +11,13 @@ describe('readonly', () => {
   })
 
   it('warn when set', () => {
-    const warn = vi.fn()
+    console.warn = vi.fn()
 
     const user = readonly({
       age: 10,
     })
     user.age = 11
 
-    expect(warn).toBeCalled()
+    expect(console.warn).toBeCalled()
   })
 })
