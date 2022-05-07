@@ -10,5 +10,5 @@ export function readonly<T>(raw: Record<any, T>) {
 }
 
 function createActiveObject<T>(raw: Record<any, T>, baseHandlers: ProxyHandlers) {
-  return new Proxy(raw, baseHandlers)
+  return new Proxy<Record<any, T>>(raw, baseHandlers)
 }
