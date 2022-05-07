@@ -15,7 +15,9 @@ describe('reactive', () => {
     expect(isReadonly(original)).toBe(false)
     const evil = {
       __v_isReactive: true,
+      __v_isReadonly: true,
     }
     expect(isReactive(evil)).toBe(false)
+    expect(isReadonly(evil)).toBe(false)
   })
 })
