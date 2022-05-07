@@ -1,8 +1,8 @@
 import { track, trigger } from './effect'
 
-export const enum ReactiveFlags{
-  IS_REACTIVE = '__v_isReactive',
-  IS_READONLY = '__v_isReadonly',
+export const ReactiveFlags = {
+  IS_REACTIVE: Symbol('__v_isReactive'),
+  IS_READONLY: Symbol('__v_isReadonly'),
 }
 
 const get = createGetter()
