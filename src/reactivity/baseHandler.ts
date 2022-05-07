@@ -3,7 +3,10 @@ import { track, trigger } from './effect'
 const get = createGetter()
 const set = createSetter()
 const readonlyGet = createGetter(true)
-const readonlySet = createSetter()
+const readonlySet = (target: any, key: string|symbol) => {
+  console.warn(`cannot set ${String(key)} in readonly object ${target}`)
+  return true
+}
 
 function createGetter(isReadonly = false) {
   return function get(target: object, key: string|symbol) {
