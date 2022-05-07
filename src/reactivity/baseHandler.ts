@@ -25,3 +25,4 @@ export const readonlyHandlers = {
   get: createGetter(true),
   set: () => true,
 }
+export type ProxyHandlers = typeof mutableHandlers | typeof readonlyHandlers
