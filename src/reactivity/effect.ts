@@ -12,6 +12,8 @@ interface EffectOptions {
 }
 
 let activeEffect: ReactiveEffect
+let shouldTrack: boolean
+
 const targetMap = new Map<Target, DepsMap>()
 class ReactiveEffect {
   private _fn: any
@@ -25,8 +27,18 @@ class ReactiveEffect {
   }
 
   run() {
+    // 是否收集依赖
+    if (!this.active)
+      return this._fn()
+
+    shouldTrack = true
     activeEffect = this
-    return this._fn()
+
+    const result = this._fn()
+    // reset
+    shouldTrack = false
+
+    return result
   }
 
   stop() {
@@ -56,6 +68,9 @@ export function effect(fn: Function, options: EffectOptions = {}) {
 }
 
 export function track(target: Target, key: any) {
+  if (!activeEffect || !shouldTrack)
+    return
+
   // target:key -> dep
   let depsMap = targetMap.get(target)
   if (!depsMap) {
