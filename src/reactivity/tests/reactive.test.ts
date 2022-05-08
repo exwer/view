@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isReactive, isReadonly, reactive, readonly } from '../reactive'
+import { isReactive, reactive } from '../reactive'
 
 describe('reactive', () => {
   it('happy path', () => {
