@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { readonly } from '../reactive'
+import { readonly, isReadonly } from '../reactive';
 
 describe('readonly', () => {
   it('happy path', () => {
@@ -10,7 +10,20 @@ describe('readonly', () => {
     expect(wrapped.foo).toBe(1)
   })
 
-  it('warn when set', () => {
+  it('should make nested values readonly',()=>{
+    const original = { foo: 1, bar: { baz: 2 } }
+    const wrapped = readonly(original)
+    expect(wrapped).not.toBe(original)
+    expect(isReadonly(wrapped)).toBe(true)
+    expect(isReadonly(original)).toBe(false)
+    expect(wrapped.foo).toBe(1)
+    const evil = {
+      __v_isReadonly:true
+    }
+    expect(isReadonly(evil)).toBe(false)
+  })
+
+  it('should warn when set', () => {
     console.warn = vi.fn()
 
     const user = readonly({
