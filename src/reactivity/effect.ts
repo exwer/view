@@ -26,16 +26,17 @@ class ReactiveEffect {
   }
 
   run() {
+    // 是否收集依赖
     if (!this.active)
       return this._fn()
-    activeEffect = this
 
     shouldTrack = true
     activeEffect = this
 
     const result = this._fn()
-
+    // reset
     shouldTrack = false
+
     return result
   }
 
@@ -66,6 +67,9 @@ export function effect(fn: Function, options: EffectOptions = {}) {
 }
 
 export function track(target: Target, key: any) {
+  if (!activeEffect || !shouldTrack)
+    return
+
   // target:key -> dep
   let depsMap = targetMap.get(target)
   if (!depsMap) {
