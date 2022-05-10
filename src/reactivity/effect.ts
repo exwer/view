@@ -54,6 +54,7 @@ function cleanupEffect(effect: ReactiveEffect) {
   effect.deps.forEach((dep) => {
     dep.delete(effect)
   })
+  effect.deps.length = 0
 }
 
 export function effect(fn: Function, options: EffectOptions = {}) {
@@ -67,10 +68,9 @@ export function effect(fn: Function, options: EffectOptions = {}) {
 }
 
 export function track(target: Target, key: any) {
-  if (!activeEffect || !shouldTrack)
-    return
-
   // target:key -> dep
+  if (!isTracking())
+    return
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     depsMap = new Map()
@@ -83,14 +83,15 @@ export function track(target: Target, key: any) {
     depsMap.set(key, dep)
   }
 
-  if (!activeEffect)
-    return
-  if (!shouldTrack)
-    return
-
   dep.add(activeEffect)
   // 反向收集
   activeEffect.deps.push(dep)
+}
+function isTracking() {
+  if (!activeEffect || !shouldTrack)
+    return false
+  else
+    return true
 }
 
 export function trigger(target: Target, key: any) {
