@@ -12,6 +12,7 @@ interface EffectOptions {
 }
 
 let activeEffect: ReactiveEffect
+let shouldTrack = true
 const targetMap = new Map<Target, DepsMap>()
 class ReactiveEffect {
   private _fn: any
@@ -25,8 +26,17 @@ class ReactiveEffect {
   }
 
   run() {
+    if (!this.active)
+      return this._fn()
     activeEffect = this
-    return this._fn()
+
+    shouldTrack = true
+    activeEffect = this
+
+    const result = this._fn()
+
+    shouldTrack = false
+    return result
   }
 
   stop() {
@@ -69,10 +79,14 @@ export function track(target: Target, key: any) {
     depsMap.set(key, dep)
   }
 
+  if (!activeEffect)
+    return
+  if (!shouldTrack)
+    return
+
   dep.add(activeEffect)
   // 反向收集
-  if (activeEffect)
-    activeEffect.deps.push(dep)
+  activeEffect.deps.push(dep)
 }
 
 export function trigger(target: Target, key: any) {
