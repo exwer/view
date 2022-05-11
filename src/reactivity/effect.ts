@@ -67,6 +67,12 @@ export function effect(fn: Function, options: EffectOptions = {}) {
   return runner
 }
 
+function isTracking() {
+  if (!activeEffect || !shouldTrack)
+    return false
+  else
+    return true
+}
 export function track(target: Target, key: any) {
   // target:key -> dep
   if (!isTracking())
@@ -86,12 +92,6 @@ export function track(target: Target, key: any) {
   dep.add(activeEffect)
   // 反向收集
   activeEffect.deps.push(dep)
-}
-function isTracking() {
-  if (!activeEffect || !shouldTrack)
-    return false
-  else
-    return true
 }
 
 export function trigger(target: Target, key: any) {
