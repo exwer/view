@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { isReactive, reactive } from '../reactive'
 
 describe('reactive', () => {
@@ -15,5 +15,18 @@ describe('reactive', () => {
       __v_isReadonly: true,
     }
     expect(isReactive(evil)).toBe(false)
+  })
+  test('nested reactive', () => {
+    const original: any = {
+      nested: {
+        foo: 1,
+      },
+      array: [{ bar: 2 }],
+    }
+    const observed = reactive(original)
+    expect(isReactive(observed.nested)).toBe(true)
+    expect(isReactive(observed.array)).toBe(true)
+    // @ts-expect-error:unknown property
+    expect(isReactive(observed.array[0])).toBe(true)
   })
 })
