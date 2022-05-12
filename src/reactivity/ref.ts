@@ -46,3 +46,7 @@ function trackRefValue(ref: RefImpl) {
 export function ref(value: any) {
   return new RefImpl(value)
 }
+
+export function isRef(value: any) {
+  return value instanceof RefImpl
+}
