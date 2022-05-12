@@ -27,3 +27,7 @@ export function isReadonly(target: any) {
 function createActiveObject<T>(raw: Record<any, T>, baseHandlers: ProxyHandlers) {
   return new Proxy<Record<any, T>>(raw, baseHandlers)
 }
+
+export function isProxy(value: any) {
+  return isReactive(value) || isReadonly(value)
+}
