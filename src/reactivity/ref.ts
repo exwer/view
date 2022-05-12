@@ -1,3 +1,4 @@
+import { hasChanged } from '../shared/index'
 import type { ReactiveEffect } from './effect'
 import { isTracking, trackEffects, triggerEffects } from './effect'
 
@@ -10,16 +11,23 @@ class RefImpl {
   }
 
   get value() {
-    if (isTracking())
-      trackEffects(this.dep)
+    trackRefValue(this)
     return this._value
   }
 
   set value(newValue: any) {
     // 先修改value 再进行通知
-    this._value = newValue
-    triggerEffects(this.dep)
+    if (hasChanged(this._value, newValue)) {
+      this._value = newValue
+      triggerEffects(this.dep)
+    }
   }
+}
+
+function trackRefValue(ref: RefImpl) {
+  // 通过isTracking判断是否有activeEffect
+  if (isTracking())
+    trackEffects(ref.dep)
 }
 
 export function ref(value: any) {
