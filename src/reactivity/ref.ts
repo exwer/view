@@ -1,12 +1,15 @@
-import { hasChanged } from '../shared/index'
+import { hasChanged, isObject } from '../shared/index'
 import type { ReactiveEffect } from './effect'
 import { isTracking, trackEffects, triggerEffects } from './effect'
+import { reactive } from './reactive'
 
 class RefImpl {
   private _value: any
   public dep: Set<ReactiveEffect>
+  private _rawValue: any
   constructor(value: any) {
-    this._value = value
+    this._rawValue = value
+    this._value = convertObjectToReactive(value)
     this.dep = new Set()
   }
 
@@ -17,11 +20,21 @@ class RefImpl {
 
   set value(newValue: any) {
     // 先修改value 再进行通知
-    if (hasChanged(this._value, newValue)) {
-      this._value = newValue
+    // this._value可能是reactive对象或者普通值
+    // 因此需要对比rawValue
+    if (hasChanged(this._rawValue, newValue)) {
+      this._rawValue = newValue
+      this._value = isObject(newValue) ? reactive(newValue) : newValue
       triggerEffects(this.dep)
     }
   }
+}
+
+function convertObjectToReactive(value: any) {
+  if (isObject(value))
+    return reactive(value)
+
+  return value
 }
 
 function trackRefValue(ref: RefImpl) {
