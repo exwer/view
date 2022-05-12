@@ -1,5 +1,5 @@
 import { describe, expect, it, test } from 'vitest'
-import { isReactive, reactive } from '../reactive'
+import { isProxy, isReactive, reactive } from '../reactive'
 
 describe('reactive', () => {
   it('happy path', () => {
@@ -15,6 +15,8 @@ describe('reactive', () => {
       __v_isReadonly: true,
     }
     expect(isReactive(evil)).toBe(false)
+
+    expect(isProxy(observed)).toBe(true)
   })
   test('nested reactive', () => {
     const original: any = {
