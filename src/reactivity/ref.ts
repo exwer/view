@@ -50,3 +50,7 @@ export function ref(value: any) {
 export function isRef(value: any) {
   return value instanceof RefImpl
 }
+
+export function unRef(value: any) {
+  return isRef(value) ? value.value : value
+}
