@@ -14,7 +14,7 @@ interface EffectOptions {
 let activeEffect: ReactiveEffect
 let shouldTrack = true
 const targetMap = new Map<Target, DepsMap>()
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any
   public scheduler
   private active = true
@@ -67,7 +67,7 @@ export function effect(fn: Function, options: EffectOptions = {}) {
   return runner
 }
 
-function isTracking() {
+export function isTracking() {
   if (!activeEffect || !shouldTrack)
     return false
   else
@@ -89,6 +89,12 @@ export function track(target: Target, key: any) {
     depsMap.set(key, dep)
   }
 
+  trackEffects(dep)
+}
+
+export function trackEffects(dep: Set<ReactiveEffect>) {
+  if (dep.has(activeEffect))
+    return
   dep.add(activeEffect)
   // 反向收集
   activeEffect.deps.push(dep)
@@ -99,14 +105,17 @@ export function trigger(target: Target, key: any) {
 
   if (depsMap) {
     const dep = depsMap.get(key)
-    if (dep) {
-      for (const effect of dep.values()) {
-        if (effect.scheduler)
-          effect.scheduler()
-        else
-          effect.run()
-      }
-    }
+    if (dep)
+      triggerEffects(dep)
+  }
+}
+
+export function triggerEffects(dep: Set<ReactiveEffect>) {
+  for (const effect of dep.values()) {
+    if (effect.scheduler)
+      effect.scheduler()
+    else
+      effect.run()
   }
 }
 
