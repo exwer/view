@@ -17,7 +17,7 @@ const readonlySet = (target: any, key: string|symbol) => {
 }
 
 function createGetter(isReadonly = false, shallow = false) {
-  return function get(target: object, key: string|symbol) {
+  return function get(target: object, key: string|symbol): unknown {
     // for isReactive
     if (key === ReactiveFlags.IS_REACTIVE)
       return !isReadonly
