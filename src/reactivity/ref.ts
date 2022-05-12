@@ -51,6 +51,24 @@ export function isRef(value: any) {
   return value instanceof RefImpl
 }
 
+export type UnRef<T> = T extends RefImpl ? T['value'] : T
 export function unRef(value: any) {
   return isRef(value) ? value.value : value
+}
+
+export type ProxyRef<T extends Record<any, any>> = {
+  [K in keyof T]: T[K] extends RefImpl ? T[K]['value'] : T[K]
+}
+export function proxyRefs<T extends Record<any, any>>(target: T): ProxyRef<T> {
+  return new Proxy(target, {
+    get(target, key) {
+      return unRef(Reflect.get(target, key))
+    },
+    set(target, key: string, value) {
+      if (isRef(target[key]) && !isRef(value))
+        return (target[key].value = value)
+      else
+        return Reflect.set(target, key, value)
+    },
+  })
 }
