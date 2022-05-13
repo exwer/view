@@ -1,7 +1,7 @@
 import type { ProxyHandlers } from './baseHandler'
 import { ReactiveFlags, mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandler'
 
-export function reactive<T>(raw: Record<any, T>) {
+export function reactive<T extends Record<any, any>>(raw: T): T {
   return createActiveObject(raw, mutableHandlers)
 }
 
@@ -24,7 +24,7 @@ export function isReadonly(target: any) {
   return !!target[ReactiveFlags.IS_READONLY]
 }
 
-function createActiveObject<T>(raw: Record<any, T>, baseHandlers: ProxyHandlers) {
+function createActiveObject<T extends Record<any, any>>(raw: T, baseHandlers: ProxyHandlers) {
   return new Proxy<Record<any, T>>(raw, baseHandlers)
 }
 
