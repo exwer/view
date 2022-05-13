@@ -30,5 +30,17 @@ describe('computed', () => {
     // should not compute again
     cValue.value
     expect(getter).toHaveBeenCalledTimes(1)
+
+    // should compute until been called
+    value.foo = 2
+    expect(getter).toHaveBeenCalledTimes(1)
+
+    // now it should computed
+    expect(cValue.value).toBe(2)
+    expect(getter).toHaveBeenCalledTimes(2)
+
+    // should not compute again
+    cValue.value
+    expect(getter).toHaveBeenCalledTimes(2)
   })
 })
