@@ -7,6 +7,7 @@ class ComputedRefImpl {
   constructor(getter: any) {
     this._getter = getter
 
+    // use scheduler
     this._effect = new ReactiveEffect(getter, () => {
       if (!this._dirty)
         this._dirty = true
