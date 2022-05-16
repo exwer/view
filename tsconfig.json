@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
-    "lib": ["es6","DOM"],
+    "lib": ["es6", "DOM"],
     "downlevelIteration": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
