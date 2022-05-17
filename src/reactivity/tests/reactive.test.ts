@@ -28,7 +28,6 @@ describe('reactive', () => {
     const observed = reactive(original)
     expect(isReactive(observed.nested)).toBe(true)
     expect(isReactive(observed.array)).toBe(true)
-    // @ts-expect-error:unknown property
     expect(isReactive(observed.array[0])).toBe(true)
   })
 })
