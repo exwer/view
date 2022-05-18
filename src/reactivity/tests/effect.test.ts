@@ -18,6 +18,10 @@ describe('effect', () => {
     // update
     user.age++
     expect(nextAge).toBe(12)
+
+    effect(() => {
+      user.age = user.age + 1
+    })
   })
 
   it('runner', () => {

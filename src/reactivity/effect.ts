@@ -11,15 +11,16 @@ interface EffectOptions {
   onStop?: () => void
 }
 
-let activeEffect: ReactiveEffect
+let activeEffect: ReactiveEffect | undefined
 let shouldTrack = true
 const targetMap = new Map<Target, DepsMap>()
 export class ReactiveEffect {
   private _fn: any
-  public scheduler
   private active = true
   public deps: Set<any>[] = []
+  parent: ReactiveEffect | undefined = undefined
   public onStop?: () => void
+  public scheduler
   constructor(fn: Function, scheduler?: EffectOptions['scheduler']) {
     this._fn = fn
     this.scheduler = scheduler
@@ -30,14 +31,24 @@ export class ReactiveEffect {
     if (!this.active)
       return this._fn()
 
-    shouldTrack = true
-    activeEffect = this
-
-    const result = this._fn()
-    // reset
-    shouldTrack = false
-
-    return result
+    let parent: ReactiveEffect | undefined = activeEffect
+    const lastShouldTrack = shouldTrack
+    while (parent) {
+      if (parent === this)
+        return
+      parent = parent.parent
+    }
+    try {
+      this.parent = activeEffect
+      activeEffect = this
+      shouldTrack = true
+      return this._fn()
+    }
+    finally {
+      activeEffect = this.parent
+      this.parent = undefined
+      shouldTrack = lastShouldTrack
+    }
   }
 
   stop() {
@@ -102,12 +113,11 @@ export function trackEffects(dep: Set<ReactiveEffect>) {
 
 export function trigger(target: Target, key: any) {
   const depsMap = targetMap.get(target)
-
-  if (depsMap) {
-    const dep = depsMap.get(key)
-    if (dep)
-      triggerEffects(dep)
-  }
+  if (!depsMap)
+    return
+  const dep = depsMap.get(key)
+  if (dep)
+    triggerEffects(dep)
 }
 
 export function triggerEffects(dep: Set<ReactiveEffect>) {
