@@ -1,26 +1,26 @@
-import type { ComponentInstance, Container, RootVNode, VNode } from './types'
+import type { ComponentInstance, Container } from './types'
 import { createComponentInstance, setupComponent } from './component'
 
-export function render(vNode: VNode | RootVNode, container: Container) {
+export function render(vNode, container: Container) {
   // patch
   patch(vNode, container)
 }
 
-function patch(vNode: VNode, container: Container) {
+function patch(vNode, container: Container) {
   // 判断vNode是element还是component
 
-  if (typeof vNode.type === 'object')
-    processComponent(vNode, container)
-  else
+  if ('props' in vNode)
     processElement(vNode, container)
+  else
+    processComponent(vNode, container)
 }
 
-function processElement(vNode: VNode, container: Container) {
+function processElement(vNode, container: Container) {
   // TODO:判断是更新还是初始化
   mountElement(vNode, container)
 }
 
-function mountElement(vNode: VNode, container: Container) {
+function mountElement(vNode, container: Container) {
   // 创建节点
   const el = document.createElement(vNode.type)
 
@@ -44,11 +44,11 @@ function mountElement(vNode: VNode, container: Container) {
   container.append(el)
 }
 
-function processComponent(vNode: VNode, container: Container) {
+function processComponent(vNode, container: Container) {
   mountComponent(vNode, container)
 }
 
-function mountComponent(vNode: VNode, container: Container) {
+function mountComponent(vNode, container: Container) {
   const instance = createComponentInstance(vNode)
   setupComponent(instance)
   setupRenderEffect(instance, container)

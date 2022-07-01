@@ -1,7 +1,7 @@
 export interface VNode {
-  type: HTMLElementTagNameMap | Component
-  props?: object
-  children?: string | string[]
+  type: keyof HTMLElementTagNameMap
+  props?: Record<string, any>
+  children?: string | VNode[]
 }
 
 type Render = () => VNode
