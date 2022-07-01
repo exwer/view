@@ -23,8 +23,7 @@ function mountComponent(vNode, container) {
 }
 
 function setupRenderEffect(instance, container) {
-  const subTree = instance.render()
-
+  const subTree = instance.render.call(instance.setupState)
   // vNode -> patch
   // vNode -> element -> mountElement
   patch(subTree, container)
