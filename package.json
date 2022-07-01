@@ -3,28 +3,29 @@
   "version": "0.0.0",
   "packageManager": "pnpm@6.32.3",
   "description": "",
-  "keywords": [],
-  "homepage": "https://github.com/love-js/view#readme",
-  "bugs": {
-    "url": "https://github.com/love-js/view/issues"
-  },
-  "license": "MIT",
   "author": "love-JS <ss.lbw.ss@gmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/love-js",
+  "homepage": "https://github.com/love-js/view#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/love-js/view.git"
   },
-  "funding": "https://github.com/sponsors/love-js",
+  "bugs": {
+    "url": "https://github.com/love-js/view/issues"
+  },
+  "keywords": [],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "typesVersions": {
     "*": {
       "*": [
@@ -36,8 +37,8 @@
   "files": [
     "dist"
   ],
-  "sideEffects": false,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "build": "rimraf dist && unbuild",
     "dev": "unbuild --stub",
     "lint": "eslint .",
