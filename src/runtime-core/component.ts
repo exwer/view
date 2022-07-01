@@ -1,3 +1,4 @@
+import type { ComponentInstance } from './types'
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
@@ -6,7 +7,7 @@ export function createComponentInstance(vNode: any) {
   return component
 }
 
-export function setupComponent(instance) {
+export function setupComponent(instance: ComponentInstance) {
   // TODO:initProps
   // TODO:initSlots
 
@@ -14,7 +15,7 @@ export function setupComponent(instance) {
 }
 
 // 有状态的组件
-function setupStatefulComponent(instance) {
+function setupStatefulComponent(instance: ComponentInstance) {
   const Component = instance.type
 
   const { setup } = Component
@@ -27,7 +28,7 @@ function setupStatefulComponent(instance) {
   }
 }
 
-function handleSetupResult(instance, setupResult) {
+function handleSetupResult(instance: ComponentInstance, setupResult) {
   // TODO:handle function
 
   // handle object
