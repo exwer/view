@@ -14,17 +14,17 @@
   "bugs": {
     "url": "https://github.com/love-js/view/issues"
   },
-  "keywords": [],
+  "keywords": ["vue"],
   "sideEffects": false,
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "require": "./lib/index.cjs",
-      "import": "./lib/index.mjs"
+      "require": "./lib/view.cjs.js",
+      "import": "./lib/view.es.js"
     }
   },
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.mjs",
+  "main": "./lib/view.cjs.js",
+  "module": "./lib/view.es.js",
   "types": "./lib/index.d.ts",
   "typesVersions": {
     "*": {
