@@ -8,7 +8,7 @@ export function render(vNode, container) {
 function patch(vNode, container) {
   // 判断vNode是element还是component
 
-  if (typeof vNode === 'object')
+  if (typeof vNode.type === 'object')
     processComponent(vNode, container)
 }
 
