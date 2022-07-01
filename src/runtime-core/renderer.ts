@@ -6,8 +6,10 @@ export function render(vNode, container) {
 }
 
 function patch(vNode, container) {
-  // 处理组件
-  processComponent(vNode, container)
+  // 判断vNode是element还是component
+
+  if (typeof vNode === 'object')
+    processComponent(vNode, container)
 }
 
 function processComponent(vNode, container) {
