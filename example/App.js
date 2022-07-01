@@ -10,7 +10,6 @@ export default {
       [
         h('div', { class: '' }, 'fxck'),
         h('p', { class: '' }, 'shxt'),
-        'hhhh',
       ],
     )
   },
