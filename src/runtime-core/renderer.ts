@@ -1,3 +1,4 @@
+import { isObject } from './../shared/index';
 import { createComponentInstance, setupComponent } from './component'
 
 export function render(vNode, container) {
@@ -8,7 +9,7 @@ export function render(vNode, container) {
 function patch(vNode, container) {
   // 判断vNode是element还是component
 
-  if (typeof vNode.type === 'object')
+  if (isObject(vNode.type))
     processComponent(vNode, container)
 }
 
