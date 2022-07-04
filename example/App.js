@@ -13,7 +13,18 @@ export default {
         id: 'shit',
         class: ['red', 'hard'],
       },
-      `hi ${this.msg}`,
+      [
+        h(
+          'p',
+          {},
+          this.msg,
+        ),
+        h(
+          'p',
+          {},
+          this.msg,
+        ),
+      ],
     )
   },
   setup() {
