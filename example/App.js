@@ -8,14 +8,14 @@ export default {
         class: ['red', 'hard'],
       },
       [
-        h('div', { class: '' }, 'fxck'),
+        h('div', { class: '' }, this.msg),
         h('p', { class: '' }, 'shxt'),
       ],
     )
   },
   setup() {
     return {
-      msg: 'view',
+      msg: 'hello',
     }
   },
 }

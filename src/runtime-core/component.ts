@@ -4,6 +4,7 @@ export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
     type: vNode.type,
+    setupState: {},
   }
   return component
 }
@@ -18,6 +19,16 @@ export function setupComponent(instance: ComponentInstance) {
 // 有状态的组件
 function setupStatefulComponent(instance: ComponentInstance) {
   const Component = instance.type
+
+  // 创建代理对象
+  instance.proxy = new Proxy({}, {
+    get(target, key) {
+      // setupState
+      const { setupState } = instance
+      if (key in setupState)
+        return setupState[key]
+    },
+  })
 
   const { setup } = Component
 
