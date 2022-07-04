@@ -1,4 +1,5 @@
 import type { ComponentInstance, Container } from './types'
+import { isObject } from './../shared/index'
 import { createComponentInstance, setupComponent } from './component'
 
 export function render(vNode, container: Container) {
@@ -12,6 +13,7 @@ function patch(vNode, container: Container) {
   if ('props' in vNode)
     processElement(vNode, container)
   else
+  if (isObject(vNode.type))
     processComponent(vNode, container)
 }
 
