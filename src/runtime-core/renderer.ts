@@ -23,7 +23,7 @@ function processElement(vNode, container: Container) {
 
 function mountElement(vNode, container: Container) {
   // 创建节点
-  const el = document.createElement(vNode.type)
+  const el = (vNode.el = document.createElement(vNode.type))
 
   // 挂载属性
   if (vNode.props) {
@@ -52,13 +52,17 @@ function processComponent(vNode, container: Container) {
 function mountComponent(vNode, container: Container) {
   const instance = createComponentInstance(vNode)
   setupComponent(instance)
-  setupRenderEffect(instance, container)
+  setupRenderEffect(instance, vNode, container)
 }
 
-function setupRenderEffect(instance: ComponentInstance, container: Container) {
-  const subTree = instance.render.call(instance.setupState)
-  // vNode -> patch
-  // vNode -> element -> mountElement
+function setupRenderEffect(instance: ComponentInstance, VNode, container: Container) {
+  const { proxy } = instance
+  const subTree = instance.render.call(proxy)
+
+  // vNode -> patch -> element -> mountElement
   patch(subTree, container)
+
+  // 需要把节点保存下来
+  VNode.el = subTree.el
 }
 

@@ -27,6 +27,10 @@ function setupStatefulComponent(instance: ComponentInstance) {
       const { setupState } = instance
       if (key in setupState)
         return setupState[key]
+
+      // $el
+      if (key === '$el')
+        return instance.vNode.el
     },
   })
 
