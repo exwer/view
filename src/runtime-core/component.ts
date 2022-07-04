@@ -1,3 +1,4 @@
+import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
 export function createComponentInstance(vNode: any) {
@@ -21,18 +22,7 @@ function setupStatefulComponent(instance: ComponentInstance) {
   const Component = instance.type
 
   // 创建代理对象
-  instance.proxy = new Proxy({}, {
-    get(target, key) {
-      // setupState
-      const { setupState } = instance
-      if (key in setupState)
-        return setupState[key]
-
-      // $el
-      if (key === '$el')
-        return instance.vNode.el
-    },
-  })
+  instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers)
 
   const { setup } = Component
 

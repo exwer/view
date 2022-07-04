@@ -49,13 +49,13 @@ function processComponent(vNode, container: Container) {
   mountComponent(vNode, container)
 }
 
-function mountComponent(vNode, container: Container) {
-  const instance = createComponentInstance(vNode)
+function mountComponent(initialVNode, container: Container) {
+  const instance = createComponentInstance(initialVNode)
   setupComponent(instance)
-  setupRenderEffect(instance, vNode, container)
+  setupRenderEffect(instance, initialVNode, container)
 }
 
-function setupRenderEffect(instance: ComponentInstance, VNode, container: Container) {
+function setupRenderEffect(instance: ComponentInstance, initialVNode, container: Container) {
   const { proxy } = instance
   const subTree = instance.render.call(proxy)
 
@@ -63,6 +63,6 @@ function setupRenderEffect(instance: ComponentInstance, VNode, container: Contai
   patch(subTree, container)
 
   // 需要把节点保存下来
-  VNode.el = subTree.el
+  initialVNode.el = subTree.el
 }
 
