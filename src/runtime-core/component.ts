@@ -1,4 +1,5 @@
 import type { ComponentInstance } from './types'
+import { isObject } from './../shared/index'
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
@@ -32,7 +33,7 @@ function handleSetupResult(instance: ComponentInstance, setupResult) {
   // TODO:handle function
 
   // handle object
-  if (typeof setupResult === 'object')
+  if (isObject(setupResult))
     instance.setupState = setupResult
 
   finishComponentSetup(instance)
