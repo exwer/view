@@ -10,11 +10,10 @@ export function render(vNode, container: Container) {
 function patch(vNode, container: Container) {
   // 判断vNode是element还是component
 
-  if ('props' in vNode)
-    processElement(vNode, container)
-  else
   if (isObject(vNode.type))
     processComponent(vNode, container)
+  else
+    processElement(vNode, container)
 }
 
 function processElement(vNode, container: Container) {
