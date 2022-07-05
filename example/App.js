@@ -12,6 +12,9 @@ export default {
       {
         id: 'shit',
         class: ['red', 'hard'],
+        onClick() {
+          console.log('click')
+        },
       },
       [
         h(
