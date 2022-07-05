@@ -11,6 +11,9 @@ export default {
         onAdd(a, b) {
           console.log('onAdd', a, b)
         },
+        onAddFoo() {
+          console.log('add-foo')
+        },
       })])
   },
   setup() {
