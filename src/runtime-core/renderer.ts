@@ -27,15 +27,24 @@ function mountElement(vNode, container: Container) {
   // 创建节点
   const el = (vNode.el = document.createElement(vNode.type))
 
+  const { children, props, shapeFlag } = vNode
+
   // 挂载属性
-  if (vNode.props) {
-    for (const [key, val] of Object.entries(vNode.props))
-      el.setAttribute(key, val)
+  if (props) {
+    for (const [key, val] of Object.entries(vNode.props)) {
+      // 处理事件
+      if (/^on[A-Z]/.test(key)) {
+        const eventName = key.slice(2).toLocaleLowerCase()
+        el.addEventListener(eventName, val)
+      }
+      else {
+        el.setAttribute(key, val)
+      }
+    }
   }
 
   // 渲染子节点
   // 可能是嵌套结构
-  const { children, shapeFlag } = vNode
   if (children) {
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
       el.textContent = vNode.children
