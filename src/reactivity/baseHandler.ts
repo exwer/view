@@ -11,13 +11,13 @@ const get = createGetter()
 const set = createSetter()
 const readonlyGet = createGetter(true)
 const shallowReadonlyGet = createGetter(true, true)
-const readonlySet = (target: any, key: string|symbol) => {
-  console.warn(`cannot set ${String(key)} in readonly object ${target}`)
+const readonlySet = (target: any, key: string | symbol) => {
+  console.warn(`cannot set ${String(key)} in readonly object`)
   return true
 }
 
 function createGetter(isReadonly = false, shallow = false) {
-  return function get(target: object, key: string|symbol): unknown {
+  return function get(target: object, key: string | symbol): unknown {
     // for isReactive
     if (key === ReactiveFlags.IS_REACTIVE)
       return !isReadonly
@@ -39,7 +39,7 @@ function createGetter(isReadonly = false, shallow = false) {
 }
 
 function createSetter() {
-  return function (target: object, key: string|symbol, value: unknown) {
+  return function (target: object, key: string | symbol, value: unknown) {
     const res = Reflect.set(target, key, value)
     trigger(target, key)
     return res
