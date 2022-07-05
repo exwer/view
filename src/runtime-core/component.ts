@@ -1,17 +1,21 @@
 import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
+import { initProps } from './componentProps'
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
     type: vNode.type,
     setupState: {},
+    props: {},
   }
   return component
 }
 
 export function setupComponent(instance: ComponentInstance) {
-  // TODO:initProps
+  // initProps
+  initProps(instance, instance.props)
+
   // TODO:initSlots
 
   setupStatefulComponent(instance)
@@ -28,7 +32,7 @@ function setupStatefulComponent(instance: ComponentInstance) {
 
   if (setup) {
     // setup可以返回object或者function
-    const setupResult = setup()
+    const setupResult = setup(instance.props)
 
     handleSetupResult(instance, setupResult)
   }
