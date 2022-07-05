@@ -6,6 +6,13 @@ export const Foo = {
   },
   render() {
     const foo = h('p', {}, 'foo')
-    return h('div', {}, [foo, renderSlots(this.$slots)])
+    // 1.支持单个或多个slots的渲染
+    // 2.获取到渲染的元素和位置(具名插槽)
+    return h('div', {},
+      [
+        renderSlots(this.$slots, 'header'),
+        foo,
+        renderSlots(this.$slots, 'footer'),
+      ])
   },
 }

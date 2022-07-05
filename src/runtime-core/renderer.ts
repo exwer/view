@@ -11,7 +11,6 @@ export function render(vNode, container: Container) {
 function patch(vNode, container: Container) {
   // 判断vNode是element还是component
   const { shapeFlag } = vNode
-
   if (shapeFlag & ShapeFlags.ELEMENT)
     processElement(vNode, container)
   else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT)
