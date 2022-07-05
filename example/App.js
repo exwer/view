@@ -1,4 +1,5 @@
 import { h } from '../lib/view.es.js'
+import { Foo } from './Foo.js'
 
 // 方便调试this
 window.self = null
@@ -15,18 +16,13 @@ export default {
         onClick() {
           console.log('click')
         },
+        onMouseDown() {
+          console.log('mousedown')
+        },
       },
       [
-        h(
-          'p',
-          {},
-          this.msg,
-        ),
-        h(
-          'p',
-          {},
-          this.msg,
-        ),
+        h('div', {}, this.msg),
+        h(Foo),
       ],
     )
   },
