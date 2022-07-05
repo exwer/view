@@ -1,3 +1,4 @@
+import { isArray } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 
 export function initSlots(instance, children) {
@@ -13,5 +14,5 @@ function normalizeObjectSlots(children, slots) {
 }
 
 function normalizeSlotValue(val) {
-  return Array.isArray(val) ? val : [val]
+  return isArray(val) ? val : [val]
 }

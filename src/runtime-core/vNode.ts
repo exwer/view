@@ -1,3 +1,4 @@
+import { isArray, isObject, isString } from '../shared'
 import { ShapeFlags } from '../shared/ShapeFlags'
 
 export function createVNode(type, props?, children?) {
@@ -8,12 +9,17 @@ export function createVNode(type, props?, children?) {
     shapeFlag: getShapeFlag(type),
     el: null,
   }
-  if (typeof children === 'string')
+  // text vNode
+  if (isString(children))
     vNode.shapeFlag |= ShapeFlags.TEXT_CHILDREN
-  if (Array.isArray(children))
+
+  // vNodes
+  if (isArray(children))
     vNode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
+
+  // slots
   if (vNode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
-    if (typeof children === 'object')
+    if (isObject(children))
       vNode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
   }
 
@@ -21,5 +27,5 @@ export function createVNode(type, props?, children?) {
 }
 
 function getShapeFlag(type) {
-  return typeof type === 'string' ? ShapeFlags.ELEMENT : ShapeFlags.STATEFUL_COMPONENT
+  return isString(type) ? ShapeFlags.ELEMENT : ShapeFlags.STATEFUL_COMPONENT
 }
