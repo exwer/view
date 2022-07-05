@@ -11,8 +11,8 @@ export default {
 
     const foo = h(Foo, {},
       {
-        header: h('p', {}, '123'),
-        footer: h('p', {}, '456'),
+        header: h('p', {}, 'header'),
+        footer: h('p', {}, 'footer'),
       })
 
     return h('div', {}, [app, foo])
