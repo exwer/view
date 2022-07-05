@@ -1,3 +1,4 @@
+import { shallowReadonly } from '../reactivity/reactive'
 import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
@@ -32,7 +33,7 @@ function setupStatefulComponent(instance: ComponentInstance) {
 
   if (setup) {
     // setup可以返回object或者function
-    const setupResult = setup(instance.props)
+    const setupResult = setup(shallowReadonly(instance.props))
 
     handleSetupResult(instance, setupResult)
   }
