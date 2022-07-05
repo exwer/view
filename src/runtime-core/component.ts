@@ -3,13 +3,18 @@ import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
 import { initProps } from './componentProps'
+import { emit } from './componentEmit'
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
     type: vNode.type,
     setupState: {},
     props: {},
+    emit: () => {},
   }
+  // emit需要获取实例内容，而用户使用时只希望传入一个事件名
+  // 所以这里需要bind
+  component.emit = emit.bind(null, component) as any
   return component
 }
 
@@ -33,7 +38,7 @@ function setupStatefulComponent(instance: ComponentInstance) {
 
   if (setup) {
     // setup可以返回object或者function
-    const setupResult = setup(shallowReadonly(instance.props))
+    const setupResult = setup(shallowReadonly(instance.props), { emit: instance.emit })
 
     handleSetupResult(instance, setupResult)
   }
