@@ -4,6 +4,7 @@ import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
 import { initProps } from './componentProps'
 import { emit } from './componentEmit'
+import { initSlots } from './componentSlots'
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
@@ -11,6 +12,7 @@ export function createComponentInstance(vNode: any) {
     setupState: {},
     props: {},
     emit: () => {},
+    slots: {},
   }
   // emit需要获取实例内容，而用户使用时只希望传入一个事件名
   // 所以这里需要bind
@@ -22,7 +24,8 @@ export function setupComponent(instance: ComponentInstance) {
   // initProps
   initProps(instance, instance.vNode.props)
 
-  // TODO:initSlots
+  // initSlots
+  initSlots(instance, instance.vNode.children)
 
   setupStatefulComponent(instance)
 }
