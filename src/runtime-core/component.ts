@@ -14,7 +14,7 @@ export function createComponentInstance(vNode: any) {
 
 export function setupComponent(instance: ComponentInstance) {
   // initProps
-  initProps(instance, instance.props)
+  initProps(instance, instance.vNode.props)
 
   // TODO:initSlots
 
