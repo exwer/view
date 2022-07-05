@@ -1,4 +1,4 @@
-import { h } from '../../lib/view.es.js'
+import { h, renderSlots } from '../../lib/view.es.js'
 
 export const Foo = {
   setup() {
@@ -6,7 +6,6 @@ export const Foo = {
   },
   render() {
     const foo = h('p', {}, 'foo')
-
-    return h('div', {}, [foo, this.$slots])
+    return h('div', {}, [foo, renderSlots(this.$slots)])
   },
 }
