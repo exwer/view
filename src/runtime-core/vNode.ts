@@ -12,6 +12,10 @@ export function createVNode(type, props?, children?) {
     vNode.shapeFlag |= ShapeFlags.TEXT_CHILDREN
   if (Array.isArray(children))
     vNode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
+  if (vNode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
+    if (typeof children === 'object')
+      vNode.shapeFlag |= ShapeFlags.SLOT_CHILDREN
+  }
 
   return vNode
 }
