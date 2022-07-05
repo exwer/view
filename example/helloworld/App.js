@@ -1,4 +1,4 @@
-import { h } from '../lib/view.es.js'
+import { h } from '../../lib/view.es.js'
 import { Foo } from './Foo.js'
 
 // 方便调试this
