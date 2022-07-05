@@ -22,7 +22,7 @@ export default {
       },
       [
         h('div', {}, this.msg),
-        h(Foo),
+        h(Foo, { count: 1 }),
       ],
     )
   },
