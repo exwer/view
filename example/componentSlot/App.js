@@ -1,4 +1,4 @@
-import { h } from '../../lib/view.es.js'
+import { createTextVNode, h } from '../../lib/view.es.js'
 import { Foo } from './Foo.js'
 
 export default {
@@ -11,7 +11,10 @@ export default {
 
     const foo = h(Foo, {},
       {
-        header: ({ age }) => h('p', {}, `header${age}`),
+        header: ({ age }) => [
+          h('p', {}, `header${age}`),
+          createTextVNode('你好'),
+        ],
         footer: () => h('p', {}, 'footer'),
       })
 

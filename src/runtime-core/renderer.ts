@@ -1,7 +1,7 @@
 import { ShapeFlags } from '../shared/ShapeFlags'
 import type { ComponentInstance, Container } from './types'
 import { createComponentInstance, setupComponent } from './component'
-import { Fragment } from './vNode'
+import { Fragment, Text } from './vNode'
 
 export function render(vNode, container: Container) {
   // patch
@@ -16,6 +16,9 @@ function patch(vNode, container: Container) {
     case Fragment:
       processFragment(vNode, container)
       break
+    case Text:
+      processText(vNode, container)
+      break
     default:
       if (shapeFlag & ShapeFlags.ELEMENT)
         processElement(vNode, container)
@@ -27,6 +30,13 @@ function patch(vNode, container: Container) {
 function processFragment(vNode, container) {
   // slot节点
   mountChildren(vNode, container)
+}
+
+function processText(vNode, container) {
+  const { children } = vNode
+  const textNode = document.createTextNode(children)
+  vNode.el = textNode
+  container.append(textNode)
 }
 
 function processElement(vNode, container: Container) {
