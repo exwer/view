@@ -3,9 +3,9 @@ import type { ComponentInstance, Container } from './types'
 import { createComponentInstance, setupComponent } from './component'
 import { Fragment, Text } from './vNode'
 
-export function render(vNode, container: Container, parentComponent) {
+export function render(vNode, container: Container) {
   // patch
-  patch(vNode, container, parentComponent)
+  patch(vNode, container, null)
 }
 
 function patch(vNode, container: Container, parentComponent) {

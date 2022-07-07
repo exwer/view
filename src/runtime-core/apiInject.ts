@@ -1,3 +1,4 @@
+import { isFunc } from '../shared'
 import { getCurrentInstance } from './component'
 
 export function provide(key, value) {
@@ -15,10 +16,15 @@ export function provide(key, value) {
   }
 }
 
-export function inject(key) {
+export function inject(key, defaultValue) {
   const currentInstance: any = getCurrentInstance()
   if (currentInstance) {
     const parentProvides = currentInstance.parent.provides
-    return parentProvides[key]
+    if (key in parentProvides) { return parentProvides[key] }
+    else if (defaultValue) {
+      if (isFunc(defaultValue))
+        return defaultValue()
+    }
+    return defaultValue
   }
 }
