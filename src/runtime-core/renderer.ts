@@ -3,33 +3,33 @@ import type { ComponentInstance, Container } from './types'
 import { createComponentInstance, setupComponent } from './component'
 import { Fragment, Text } from './vNode'
 
-export function render(vNode, container: Container) {
+export function render(vNode, container: Container, parentComponent) {
   // patch
-  patch(vNode, container)
+  patch(vNode, container, parentComponent)
 }
 
-function patch(vNode, container: Container) {
+function patch(vNode, container: Container, parentComponent) {
   // 判断vNode类型
   const { shapeFlag, type } = vNode
 
   switch (type) {
     case Fragment:
-      processFragment(vNode, container)
+      processFragment(vNode, container, parentComponent)
       break
     case Text:
       processText(vNode, container)
       break
     default:
       if (shapeFlag & ShapeFlags.ELEMENT)
-        processElement(vNode, container)
+        processElement(vNode, container, parentComponent)
       else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT)
-        processComponent(vNode, container)
+        processComponent(vNode, container, parentComponent)
   }
 }
 
-function processFragment(vNode, container) {
+function processFragment(vNode, container, parentComponent) {
   // slot节点
-  mountChildren(vNode, container)
+  mountChildren(vNode, container, parentComponent)
 }
 
 function processText(vNode, container) {
@@ -39,12 +39,12 @@ function processText(vNode, container) {
   container.append(textNode)
 }
 
-function processElement(vNode, container: Container) {
+function processElement(vNode, container: Container, parentComponent) {
   // TODO:判断是更新还是初始化
-  mountElement(vNode, container)
+  mountElement(vNode, container, parentComponent)
 }
 
-function mountElement(vNode, container: Container) {
+function mountElement(vNode, container: Container, parentComponent) {
   // 创建节点
   const el = (vNode.el = document.createElement(vNode.type))
 
@@ -70,23 +70,23 @@ function mountElement(vNode, container: Container) {
     if (shapeFlag & ShapeFlags.TEXT_CHILDREN)
       el.textContent = vNode.children
     else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN)
-      mountChildren(vNode, el)
+      mountChildren(vNode, el, parentComponent)
   }
 
   // 渲染节点
   container.append(el)
 }
-function mountChildren(vNode, container) {
+function mountChildren(vNode, container, parentComponent) {
   for (const child of vNode.children)
-    patch(child, container)
+    patch(child, container, parentComponent)
 }
 
-function processComponent(vNode, container: Container) {
-  mountComponent(vNode, container)
+function processComponent(vNode, container: Container, parentComponent) {
+  mountComponent(vNode, container, parentComponent)
 }
 
-function mountComponent(initialVNode, container: Container) {
-  const instance = createComponentInstance(initialVNode)
+function mountComponent(initialVNode, container: Container, parentComponent) {
+  const instance = createComponentInstance(initialVNode, parentComponent)
   setupComponent(instance)
   setupRenderEffect(instance, initialVNode, container)
 }
@@ -96,7 +96,7 @@ function setupRenderEffect(instance: ComponentInstance, initialVNode, container:
   const subTree = instance.render.call(proxy)
 
   // vNode -> patch -> element -> mountElement
-  patch(subTree, container)
+  patch(subTree, container, instance)
 
   // 需要把节点保存下来
   initialVNode.el = subTree.el
