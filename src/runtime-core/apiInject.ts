@@ -9,6 +9,7 @@ export function provide(key, value) {
 
     // 只在第一次调用时初始化
     if (currentInstance.provides === parentProvides)
+      // 原型链指向父级 这样inject时get可以一直向上寻找值
       currentInstance.provides = Object.create(parentProvides)
 
     const { provides } = currentInstance
@@ -24,7 +25,7 @@ export function inject(key, defaultValue) {
     else if (defaultValue) {
       if (isFunc(defaultValue))
         return defaultValue()
+      return defaultValue
     }
-    return defaultValue
   }
 }
