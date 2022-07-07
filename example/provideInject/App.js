@@ -15,6 +15,21 @@ const Consumer = {
   },
 }
 
+const Provider2 = {
+  name: 'Provider2',
+  setup() {
+    provide('foo', 'foo2')
+    const foo = inject('foo')
+    return {
+      foo,
+    }
+  },
+  render() {
+    return h('div', {}, [h('p', {}, `provider2${this.foo}`), h(Consumer)])
+  },
+
+}
+
 const Provider = {
   name: 'Provider',
   setup() {
@@ -22,7 +37,7 @@ const Provider = {
     provide('bar', 'barVal')
   },
   render() {
-    return h('div', {}, [h('p', {}, 'Provider'), h(Consumer)])
+    return h('div', {}, [h('p', {}, 'Provider'), h(Provider2)])
   },
 }
 
