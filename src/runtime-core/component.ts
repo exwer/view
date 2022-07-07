@@ -7,8 +7,7 @@ import { emit } from './componentEmit'
 import { initSlots } from './componentSlots'
 
 let currentInstance = null
-export function createComponentInstance(vNode: any, parentComponent) {
-  console.log('parent:', parentComponent)
+export function createComponentInstance(vNode: any, parent) {
   const component = {
     vNode,
     type: vNode.type,
@@ -16,9 +15,10 @@ export function createComponentInstance(vNode: any, parentComponent) {
     props: {},
     emit: () => {},
     slots: {},
-    provides: {},
-    parent: parentComponent,
+    provides: parent ? parent.provides : {},
+    parent,
   }
+
   // emit需要获取实例内容，而用户使用时只希望传入一个事件名
   // 所以这里需要bind
   component.emit = emit.bind(null, component) as any
