@@ -8,6 +8,6 @@ export default {
     console.log('App:', instance)
   },
   render() {
-    return h('div', {}, [h('p', {}, 'currentInstance demo', h(Foo))])
+    return h('div', {}, [h('p', {}, 'currentInstance demo'), h(Foo)])
   },
 }

@@ -5,6 +5,8 @@ import { isObject } from './../shared/index'
 import { initProps } from './componentProps'
 import { emit } from './componentEmit'
 import { initSlots } from './componentSlots'
+
+let currentInstance = null
 export function createComponentInstance(vNode: any) {
   const component = {
     vNode,
@@ -40,6 +42,7 @@ function setupStatefulComponent(instance: ComponentInstance) {
   const { setup } = Component
 
   if (setup) {
+    setCurrentInstance(instance)
     // setup可以返回object或者function
     const setupResult = setup(shallowReadonly(instance.props), { emit: instance.emit })
 
@@ -63,3 +66,10 @@ function finishComponentSetup(instance: any) {
     instance.render = Component.render
 }
 
+export function getCurrentInstance() {
+  return currentInstance
+}
+
+export function setCurrentInstance(instance) {
+  currentInstance = instance
+}
