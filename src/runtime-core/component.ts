@@ -8,9 +8,9 @@ import { initSlots } from './componentSlots'
 
 let currentInstance = null
 export function createComponentInstance(vNode: any, parent) {
-  const component = {
+  const instance = {
     vNode,
-    type: vNode.type,
+    component: vNode.type,
     setupState: {},
     props: {},
     emit: () => {},
@@ -23,8 +23,8 @@ export function createComponentInstance(vNode: any, parent) {
 
   // emit需要获取实例内容，而用户使用时只希望传入一个事件名
   // 所以这里需要bind
-  component.emit = emit.bind(null, component) as any
-  return component
+  instance.emit = emit.bind(null, instance) as any
+  return instance
 }
 
 export function setupComponent(instance: ComponentInstance) {
@@ -37,9 +37,9 @@ export function setupComponent(instance: ComponentInstance) {
   setupStatefulComponent(instance)
 }
 
-// 有状态的组件
+// 有状态的组e
 function setupStatefulComponent(instance: ComponentInstance) {
-  const Component = instance.type
+  const Component = instance.component
 
   // 创建代理对象
   instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers)
@@ -66,7 +66,7 @@ function handleSetupResult(instance: ComponentInstance, setupResult) {
 }
 
 function finishComponentSetup(instance: any) {
-  const Component = instance.type
+  const Component = instance.component
   if (Component.render)
     instance.render = Component.render
 }
