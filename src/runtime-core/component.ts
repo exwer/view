@@ -41,9 +41,6 @@ export function setupComponent(instance: ComponentInstance) {
 function setupStatefulComponent(instance: ComponentInstance) {
   const Component = instance.component
 
-  // 创建代理对象
-  instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers)
-
   const { setup } = Component
 
   if (setup) {
@@ -53,6 +50,9 @@ function setupStatefulComponent(instance: ComponentInstance) {
 
     handleSetupResult(instance, setupResult)
   }
+
+  // 创建代理对象
+  instance.proxy = new Proxy({ _: instance }, PublicInstanceProxyHandlers)
 }
 
 function handleSetupResult(instance: ComponentInstance, setupResult) {
