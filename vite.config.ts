@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import ts from 'rollup-plugin-typescript2'
 
 export default defineConfig({
   build: {
@@ -14,6 +15,19 @@ export default defineConfig({
       output: {
         dir: './lib',
       },
+      plugins: [
+        ts({
+          check: false,
+          tsconfig: './tsconfig.json',
+          tsconfigOverride: {
+            compilerOptions: {
+              target: 'es2015',
+              declaration: true,
+              declarationMap: true,
+            },
+          },
+        }),
+      ],
     },
   },
 })
