@@ -5,7 +5,7 @@ import { Fragment, Text } from './vNode'
 import { createAppAPI } from './createApp'
 
 export function createRenderer(options) {
-  const { createElement, patchProp, insert } = options
+  const { createElement: hostCreateElement, patchProp: hostPatchProp, insert: hostInsert } = options
 
   function render(vNode, container: Container) {
     // patch
@@ -50,7 +50,7 @@ export function createRenderer(options) {
 
   function mountElement(vNode, container: Container, parentComponent) {
   // 创建节点
-    const el = (vNode.el = createElement(vNode.type))
+    const el = (vNode.el = hostCreateElement(vNode.type))
 
     const { children, props, shapeFlag } = vNode
 
@@ -58,7 +58,7 @@ export function createRenderer(options) {
     if (props) {
       for (const key in props) {
         const val = props[key]
-        patchProp(el, key, val)
+        hostPatchProp(el, key, val)
       }
     }
 
@@ -72,7 +72,7 @@ export function createRenderer(options) {
     }
 
     // 渲染节点
-    insert(el, container)
+    hostInsert(el, container)
   }
   function mountChildren(vNode, container, parentComponent) {
     for (const child of vNode.children)
