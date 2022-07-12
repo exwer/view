@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "lib",
     "target": "es5",
     "module": "esnext",
-    "lib": ["es6", "DOM"],
+    "lib": ["esnext", "DOM"],
     "downlevelIteration": true,
     "moduleResolution": "node",
     "noImplicitAny": false,
@@ -12,5 +14,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
-  }
+  },
+  "include": [
+    "src/*"
+  ]
 }
