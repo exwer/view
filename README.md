@@ -32,6 +32,7 @@ Vue3.x的个人实现版，旨在学习vue/core的核心原理，同时实践TDD
   - [x] Fragment & Text
   - [x] getCurrentInstance
   - [x] provide & inject 
+  - [ ] Custom Renderer API
 
   **component/element update**
     - [ ] update props
