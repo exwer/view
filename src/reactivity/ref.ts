@@ -55,7 +55,7 @@ function createRef(rawValue: unknown) {
   return new RefImpl(rawValue)
 }
 
-export function ref<T = any>(): Ref<T | undefined>
+export function ref<T>(value: T): Ref<T>
 export function ref(value?: unknown) {
   return createRef(value)
 }
