@@ -1,4 +1,4 @@
-import { h, renderSlots } from '../../lib/view.es.js'
+import { h, renderSlots } from '../../lib/index.mjs'
 
 export const Foo = {
   setup() {

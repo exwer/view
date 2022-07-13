@@ -17,7 +17,7 @@ const Html
 </html>`
 
 const AppJs
-= `import { h } from '../../lib/view.es.js'
+= `import { h } from '../../lib/index.mjs'
 import { Foo } from './Foo.js'
 
 export default {
@@ -33,7 +33,7 @@ export default {
 `
 
 const FooJs
-= `import { h } from '../../lib/view.es.js'
+= `import { h } from '../../lib/index.mjs'
 export const Foo = {
   setup() {
     return {
@@ -47,7 +47,7 @@ export const Foo = {
 `
 
 const mainJs
-= `import { createApp } from '../../lib/view.es.js'
+= `import { createApp } from '../../lib/index.mjs'
 import App from './App.js'
 
 const rootContainer = document.querySelector('#app')

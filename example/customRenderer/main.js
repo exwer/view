@@ -1,4 +1,4 @@
-import { createRenderer } from '../../lib/view.es.js'
+import { createRenderer } from '../../lib/index.mjs'
 import { App } from './App.js'
 
 const game = new PIXI.Application({

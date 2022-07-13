@@ -1,4 +1,4 @@
-import { h } from '../../lib/view.es.js'
+import { h } from '../../lib/index.mjs'
 import { Foo } from './Foo.js'
 
 export default {

@@ -1,4 +1,4 @@
-import { h } from '../../lib/view.es.js'
+import { h } from '../../lib/index.mjs'
 export const Foo = {
   setup(props) {
     // 1.可以访问到props

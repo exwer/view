@@ -1,4 +1,4 @@
-import { h, inject, provide } from '../../lib/view.es.js'
+import { h, inject, provide } from '../../lib/index.mjs'
 
 const Consumer = {
   name: 'Consumer',

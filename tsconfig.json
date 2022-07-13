@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "lib",
-    "target": "es5",
+    "target": "es2018",
     "module": "esnext",
     "lib": ["esnext", "DOM"],
-    "downlevelIteration": true,
     "moduleResolution": "node",
     "noImplicitAny": false,
     "esModuleInterop": true,
@@ -14,8 +11,5 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
-  },
-  "include": [
-    "src/*"
-  ]
+  }
 }
