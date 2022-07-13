@@ -1,4 +1,4 @@
-import { h } from '../../lib/view.es.js'
+import { h } from '../../lib/index.mjs'
 export const App = {
   setup() {
     return {

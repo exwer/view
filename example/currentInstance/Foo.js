@@ -1,4 +1,4 @@
-import { getCurrentInstance, h } from '../../lib/view.es.js'
+import { getCurrentInstance, h } from '../../lib/index.mjs'
 export const Foo = {
   name: 'Foo',
   setup() {
