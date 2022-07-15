@@ -1,4 +1,5 @@
 import { shallowReadonly } from '../reactivity/reactive'
+import { proxyRefs } from '../reactivity'
 import { PublicInstanceProxyHandlers } from './componentPublicInstance'
 import type { ComponentInstance } from './types'
 import { isObject } from './../shared/index'
@@ -60,7 +61,7 @@ function handleSetupResult(instance: ComponentInstance, setupResult) {
 
   // handle object
   if (isObject(setupResult))
-    instance.setupState = setupResult
+    instance.setupState = proxyRefs(setupResult)
 
   finishComponentSetup(instance)
 }
