@@ -16,7 +16,8 @@ export function createComponentInstance(vNode: any, parent) {
     props: {},
     emit: () => {},
     slots: {},
-
+    isMounted: false, // 初始化还是更新
+    subTree: {},
     // 默认为父组件的provides 如果调用了provide函数则再初始化
     provides: parent ? parent.provides : {},
     parent,
