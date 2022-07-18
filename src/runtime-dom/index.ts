@@ -6,8 +6,10 @@ function createElement(type) {
 
 function patchProp(el, key, prevVal, newVal) {
   // 如果为undefined或null,则删除旧属性
-  if (newVal === undefined || newVal === null)
-    el.removeAttribute(el, prevVal)
+  if (newVal === undefined || newVal === null) {
+    el.removeAttribute(prevVal)
+    return
+  }
 
   // 处理事件
   const isOn = (key: string) => /^on[A-Z]/.test(key)
