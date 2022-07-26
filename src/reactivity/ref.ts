@@ -3,11 +3,16 @@ import type { ReactiveEffect } from './effect'
 import { isTracking, trackEffects, triggerEffects } from './effect'
 import { reactive } from './reactive'
 
-class RefImpl {
+export interface Ref<T = any> {
+  value: T
+}
+
+class RefImpl<T> {
   private _value: any
-  public dep: Set<ReactiveEffect>
   private _rawValue: any
-  constructor(value: any) {
+  public dep: Set<ReactiveEffect>
+
+  constructor(value: T) {
     this._rawValue = value
     this._value = convertObjectToReactive(value)
     this.dep = new Set()
@@ -37,29 +42,34 @@ function convertObjectToReactive(value: any) {
   return value
 }
 
-function trackRefValue(ref: RefImpl) {
+function trackRefValue(ref: RefImpl<any>) {
   // 通过isTracking判断是否有activeEffect
   if (isTracking())
     trackEffects(ref.dep)
 }
 
-export function ref(value: any) {
-  return new RefImpl(value)
+function createRef(rawValue: unknown) {
+  if (isRef(rawValue))
+    return rawValue
+
+  return new RefImpl(rawValue)
 }
 
-export function isRef(value: any) {
+export function ref<T>(value: T): Ref<T>
+export function ref(value?: unknown) {
+  return createRef(value)
+}
+
+export function isRef<T>(r: Ref<T> | unknown): r is Ref<T>
+export function isRef(value: any): value is Ref {
   return value instanceof RefImpl
 }
 
-export type UnRef<T> = T extends RefImpl ? T['value'] : T
-export function unRef(value: any) {
-  return isRef(value) ? value.value : value
+export function unRef<T>(ref: T | Ref<T>): T {
+  return isRef(ref) ? (ref.value as any) : ref
 }
 
-export type ProxyRef<T extends Record<any, any>> = {
-  [K in keyof T]: T[K] extends RefImpl ? T[K]['value'] : T[K]
-}
-export function proxyRefs<T extends Record<any, any>>(target: T): ProxyRef<T> {
+export function proxyRefs<T extends object>(target: T) {
   return new Proxy(target, {
     get(target, key) {
       return unRef(Reflect.get(target, key))

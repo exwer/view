@@ -104,6 +104,8 @@ export function track(target: Target, key: any) {
 }
 
 export function trackEffects(dep: Set<ReactiveEffect>) {
+  if (!activeEffect)
+    return
   if (dep.has(activeEffect))
     return
   dep.add(activeEffect)

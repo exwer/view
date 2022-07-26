@@ -1,3 +1,4 @@
+import { isObject } from './../shared/index'
 import type { ProxyHandlers } from './baseHandler'
 import { ReactiveFlags, mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandler'
 
@@ -25,6 +26,9 @@ export function isReadonly(target: any) {
 }
 
 function createActiveObject<T extends Record<any, any>>(raw: T, baseHandlers: ProxyHandlers): T {
+  if (!isObject(raw))
+    throw new Error('target of activeObject must be an object')
+
   return new Proxy(raw, baseHandlers)
 }
 
