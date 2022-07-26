@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2018",
     "module": "esnext",
-    "lib": ["es6", "DOM"],
-    "downlevelIteration": true,
+    "lib": ["esnext", "DOM"],
     "moduleResolution": "node",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "esModuleInterop": true,
     "strict": true,
     "strictNullChecks": true,

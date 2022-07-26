@@ -1,4 +1,5 @@
 .cache
+lib
 .DS_Store
 .idea
 *.log
