@@ -43,6 +43,7 @@
     "addExample": "esno ./scripts/addExample.ts",
     "preinstall": "npx only-allow pnpm",
     "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "dev": "rollup -c rollup.config.ts --watch --configPlugin @rollup/plugin-typescript",
     "lint": "eslint .",
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --push --tag && pnpm publish",
