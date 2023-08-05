@@ -3,11 +3,11 @@ export default {
   input: './src/index.ts',
   output: [
     {
-      file: 'lib/view.esm.js',
+      file: 'lib/index.mjs',
       format: 'es'
     },
     {
-      file: 'lib/view.cjs.js',
+      file: 'lib/index.cjs',
       format: 'cjs'
     }
   ],
