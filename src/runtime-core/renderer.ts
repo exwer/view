@@ -14,10 +14,10 @@ export function createRenderer(options) {
   }
 
   function patch(n1, n2, container: Container, parentComponent) {
-    // 判断是更新还是初始化
     // 判断vNode类型
     const { shapeFlag, type } = n2
 
+    // 以下函数处理中，如果n1存在，则是更新，否则是初始化
     switch (type) {
       case Fragment:
         processFragment(n1, n2, container, parentComponent)
@@ -56,6 +56,8 @@ export function createRenderer(options) {
   function patchElement(n1, n2, container) {
     const oldProps = n1.props || {}
     const newProps = n2.props || {}
+    
+    //把新的el
     const el = (n2.el = n1.el)
     patchProps(el, oldProps, newProps)
   }
@@ -125,7 +127,8 @@ export function createRenderer(options) {
       if (!instance.isMounted) {
         // 初始化
         const { proxy } = instance
-        const subTree = (instance.subTree = instance.render.call(proxy))
+        instance.subTree = instance.render.call(proxy)
+        const subTree = instance.subTree 
         // vNode -> patch -> element -> mountElement
         patch(null, subTree, container, instance)
 
