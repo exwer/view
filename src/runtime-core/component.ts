@@ -62,6 +62,7 @@ function handleSetupResult(instance: ComponentInstance, setupResult) {
 
   // handle object
   if (isObject(setupResult))
+    //使用proxyRefs进行包裹确保render中直接拿到ref的.value值
     instance.setupState = proxyRefs(setupResult)
 
   finishComponentSetup(instance)
