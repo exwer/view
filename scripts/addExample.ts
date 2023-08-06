@@ -56,7 +56,8 @@ createApp(App).mount(rootContainer)
 
 if (process.argv.length <= 2)
   throw new Error('请输入example文件夹名称')
-const folderName = process.argv.slice(2)
+const folderName = process.argv[process.argv.length - 1]
+console.log(folderName)
 const folderPath = path.join(__dirname, `../example/${folderName}`)
 
 try {
