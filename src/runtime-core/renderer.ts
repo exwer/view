@@ -6,7 +6,13 @@ import { Fragment, Text } from './vNode'
 import { createAppAPI } from './createApp'
 
 export function createRenderer(options) {
-  const { createElement: hostCreateElement, patchProp: hostPatchProp, insert: hostInsert } = options
+  const {
+    createElement: hostCreateElement,
+    patchProp: hostPatchProp,
+    insert: hostInsert,
+    remove: hostRemove,
+    setElementText: hostSetElementText
+  } = options
 
   function render(vNode, container: Container) {
     // patch
@@ -34,8 +40,8 @@ export function createRenderer(options) {
   }
 
   function processFragment(n1, n2, container, parentComponent) {
-  // slot节点
-    mountChildren(n2, container, parentComponent)
+    // slot节点
+    mountChildren(n2.children, container, parentComponent)
   }
 
   function processText(n1, n2, container) {
@@ -50,16 +56,51 @@ export function createRenderer(options) {
     if (!n1)
       mountElement(n2, container, parentComponent)
     else
-      patchElement(n1, n2, container)
+      patchElement(n1, n2, container, parentComponent)
   }
 
-  function patchElement(n1, n2, container) {
+  function patchElement(n1, n2, container, parentComponent) {
     const oldProps = n1.props || {}
     const newProps = n2.props || {}
-    
+
     //把新的el
     const el = (n2.el = n1.el)
+
+    patchChildren(n1, n2, el, parentComponent)
     patchProps(el, oldProps, newProps)
+  }
+
+  function patchChildren(n1, n2, container, parentComponent) {
+    const prevShapeFlag = n1.shapeFlag
+    const newShapeFlag = n2.shapeFlag
+
+    const c1 = n1.children
+    const c2 = n2.children
+
+    if (newShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+      if (prevShapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        // 1. 清空老的children
+        unmountChildren(n1.children)
+      }
+      if (c1 !== c2) {
+        // 2. 设置新的text
+        console.log(c2)
+        hostSetElementText(container, c2)
+      }
+    } else {
+      if (prevShapeFlag & ShapeFlags.TEXT_CHILDREN) {
+        console.log(2)
+        //先清空再mount
+        hostSetElementText(container, '')
+        mountChildren(c2, container, parentComponent)
+      }
+    }
+  }
+  function unmountChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+      const el = children[i].el
+      hostRemove(el)
+    }
   }
 
   function patchProps(el, oldProps, newProps) {
@@ -82,7 +123,7 @@ export function createRenderer(options) {
   }
 
   function mountElement(vNode, container: Container, parentComponent) {
-  // 创建节点
+    // 创建节点
     const el = (vNode.el = hostCreateElement(vNode.type))
 
     const { children, props, shapeFlag } = vNode
@@ -101,14 +142,14 @@ export function createRenderer(options) {
       if (shapeFlag & ShapeFlags.TEXT_CHILDREN)
         el.textContent = vNode.children
       else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN)
-        mountChildren(vNode, el, parentComponent)
+        mountChildren(vNode.children, el, parentComponent)
     }
 
     // 渲染节点
     hostInsert(el, container)
   }
-  function mountChildren(vNode, container, parentComponent) {
-    for (const child of vNode.children)
+  function mountChildren(children, container, parentComponent) {
+    for (const child of children)
       patch(null, child, container, parentComponent)
   }
 
@@ -128,7 +169,7 @@ export function createRenderer(options) {
         // 初始化
         const { proxy } = instance
         instance.subTree = instance.render.call(proxy)
-        const subTree = instance.subTree 
+        const subTree = instance.subTree
         // vNode -> patch -> element -> mountElement
         patch(null, subTree, container, instance)
 
@@ -151,3 +192,4 @@ export function createRenderer(options) {
     createApp: createAppAPI(render),
   }
 }
+
