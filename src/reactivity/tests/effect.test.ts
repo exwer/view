@@ -18,10 +18,6 @@ describe('effect', () => {
     // update
     user.age++
     expect(nextAge).toBe(12)
-
-    effect(() => {
-      user.age = user.age + 1
-    })
   })
 
   it('runner', () => {
@@ -34,6 +30,69 @@ describe('effect', () => {
     const r = runner()
     expect(foo).toBe(12)
     expect(r).toBe('foo')
+  })
+
+  //测试嵌套effect
+  it('nesting', () => {
+    const consoleSpy = vi.spyOn(console, 'log')
+
+    const data = reactive({
+      a: 1,
+      b: 2,
+    })
+
+    effect(() => {
+      console.log('level 1')
+      effect(() => {
+        console.log('level 2')
+        effect(() => {
+          console.log('level 3', data.a)
+        })
+        console.log(data.b)
+      })
+    })
+
+    //按顺序触发
+    expect(consoleSpy.mock.calls).toEqual([
+      ['level 1'],
+      ['level 2'],
+      ['level 3', 1],
+      [2]
+    ])
+
+    consoleSpy.mockClear()
+
+    //修改对应key值应只触发当前key的effect
+    data.a = 10
+    expect(consoleSpy.mock.calls).toEqual([
+      ['level 3', 10]
+    ])
+
+    consoleSpy.mockClear()
+
+    data.b = 20
+    expect(consoleSpy.mock.calls).toEqual([
+      ['level 2'],
+      ['level 3', 10],
+      [20]
+    ])
+
+    consoleSpy.mockClear()
+
+  })
+
+  //effect应阻止无限循环的情况发生
+  it('should prevent infinite loops', () => {
+    const num = reactive({count:0})
+    const spy = vi.fn()
+    effect(() => {
+      spy()
+      num.count
+      effect(()=>{
+        num.count ++
+      })
+    })
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 
   it('scheduler', () => {
