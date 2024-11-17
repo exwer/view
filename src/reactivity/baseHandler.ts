@@ -32,6 +32,7 @@ function createGetter(isReadonly = false, shallow = false) {
 
     !isReadonly && track(target, key)
     // if res is object, return reactive object
+    //处理嵌套reactive对象
     if (isObject(res))
       return isReadonly ? readonly(res) : reactive(res)
     return res

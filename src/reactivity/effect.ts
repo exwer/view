@@ -28,26 +28,33 @@ export class ReactiveEffect {
 
   run() {
     // 是否收集依赖
+
+    // 如果effect已经stop，则直接执行fn
     if (!this.active)
       return this._fn()
 
+
+
+    //这里解决了循环依赖的问题:
+    //effect(()=>{num = num + 1})
+    //这种情况会导致无限循环，所以需要使用parent来处理
     let parent: ReactiveEffect | undefined = activeEffect
-    const lastShouldTrack = shouldTrack
     while (parent) {
       if (parent === this)
         return
       parent = parent.parent
     }
+
+    //使用parent来处理嵌套effect
+    //每处理完一个effect，parent都会更新为上一个effect，恢复上一个effect的执行环境,避免反向收集时收集到了内部错误的effect
     try {
       this.parent = activeEffect
       activeEffect = this
-      shouldTrack = true
       return this._fn()
     }
     finally {
       activeEffect = this.parent
-      this.parent = undefined
-      shouldTrack = lastShouldTrack
+      // this.parent = undefined
     }
   }
 
@@ -73,7 +80,9 @@ export function effect(fn: Function, options: EffectOptions = {}) {
   extend(_effect, options)
   _effect.run()
 
+  //返回runner的话，run方法中的this会乱，这里需要先绑定
   const runner: Runner = _effect.run.bind(_effect)
+
   runner.effect = _effect
   return runner
 }
